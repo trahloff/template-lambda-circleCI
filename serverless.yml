@@ -103,9 +103,9 @@ resources:
 custom:
   stage: ${opt:stage, self:provider.stage}
   domains:
-    prod: api
+    dev: api
     staging: staging-api
-    dev: dev-api
+    prod: greetings
 
 ################################### DOMAIN MANAGEMENT ###################################
   customDomain: # https://api.tobiasrahloff.com/v1/mensa

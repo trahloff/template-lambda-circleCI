@@ -13,8 +13,7 @@ jobs:
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - dependencies-cache
+            - dependencies-cache  # fallback to using the latest cache if no exact match is found
 
       - run:
           name: Install Serverless CLI and dependencies
@@ -27,13 +26,9 @@ jobs:
           command: yarn test --coverage
 
       - run:
-          name: prune last versions
-          command: sls prune -n 5
-
-      - run:
           name: Deploy application to DEV
           command: |
-            sls deploy --verbose
+            sls deploy --verbose --stage dev
 
       - run:
           name: prune last versions
