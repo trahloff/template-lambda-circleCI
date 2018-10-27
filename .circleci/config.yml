@@ -1,0 +1,53 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/cantinr-backend
+
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.10
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-cache
+
+      - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            sudo npm i -g serverless yarn
+            yarn
+
+      - run: 
+          name: Run tests with code coverage
+          command: yarn test --coverage
+
+      - run:
+          name: prune last versions
+          command: sls prune -n 5
+
+      - run:
+          name: Deploy application to DEV
+          command: |
+            sls deploy --verbose
+
+      - run:
+          name: prune last versions
+          command: sls prune -n 5
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-cache-{{ checksum "package.json" }}
+
+workflows:
+  version: 2
+  release_dev:
+    jobs:
+      - build:
+          context: aws-sls
+        

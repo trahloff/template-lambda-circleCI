@@ -1,0 +1,127 @@
+service: circleci
+
+
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+
+plugins:
+  - serverless-plugin-iopipe
+  - serverless-domain-manager # https://github.com/amplify-education/serverless-domain-manager
+  - serverless-plugin-warmup # https://github.com/FidelLimited/serverless-plugin-warmup
+  - serverless-prune-plugin # https://github.com/claygregory/serverless-prune-plugin
+  - serverless-offline # https://github.com/dherault/serverless-offline
+  - serverless-sam # https://github.com/SAPessi/serveyarn rless-sam
+
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs8.10
+  timeout: 15
+  memorySize: 1024
+  region: ${opt:region, 'eu-central-1'}
+  environment:
+    IOPIPE_TOKEN: ${env:IOPIPE_TOKEN}
+    DYNAMODB_TABLE_EXAMPLE: ${self:service}-${opt:stage, self:provider.stage}-example
+    S3_BUCKET_EXAMPLE: ${self:service}-${opt:stage, self:provider.stage}-example
+    REGION: ${self:provider.region}
+
+
+package:
+  individually: false
+  exclude:
+    - dist/**
+    - test/**
+    - coverage/**
+    - .circleci/**
+    - _optimize/**
+    - _warmup/**
+    - '*.log'
+    # - node_modules/**
+
+################################### IAM MANAGEMENT ###################################
+  iamRoleStatements:
+    # allow function to access the dynamodb tables for mensa and meals
+    - Effect: Allow 
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        # - dynamodb:DeleteItem # not needed right now
+      Resource: 
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_EXAMPLE}"
+
+    # allow the serverless-warmup plugin to ping lambdas
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource:
+      - Fn::Join:
+        - ':'
+        - 
+          - 'arn:aws:lambda'
+          - Ref: AWS::Region
+          - Ref: AWS::AccountId
+          - function:${self:service}-${opt:stage, self:provider.stage}-*
+    
+
+####################################### Functions #######################################
+functions:
+  hello:
+    handler: functions/greetings.hello
+    events:
+      - http:
+          path: hello
+          method: get
+          cors: true
+
+
+resources:
+############################### CloudFormation Ressources ###############################
+  Resources:
+
+    ExampleDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_EXAMPLE}
+
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  domains:
+    prod: api
+    staging: staging-api
+    dev: dev-api
+
+################################### DOMAIN MANAGEMENT ###################################
+  customDomain: # https://api.tobiasrahloff.com/v1/mensa
+    domainName: ${self:custom.domains.${self:custom.stage}}.tobiasrahloff.com
+    stage: ${opt:stage, self:provider.stage}
+    basePath: v1
+    certificateName: "tobiasrahloff.com"
+    createRoute53Record: true
+    endpointType: 'edge'
+    
+############################# WARMUP MANAGEMENT #############################
+  warmup:
+    default: prod
+    folderName: '_warmup' # Name of the folder created for the generated warmup 
+    cleanFolder: false
+    memorySize: 256
+    name: ${self:service}-${opt:stage, self:provider.stage}-warmup
+    schedule: 'cron(0/5 8-17 ? * MON-FRI *)' # Run WarmUP every 5 minutes Mon-Fri between 8:00am and 5:55pm (UTC)
+    timeout: 20
