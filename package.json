@@ -34,7 +34,7 @@
   "license": "GPL-3.0",
   "jest": {
     "collectCoverage": true,
-    "coverageDirectory": "coverage/jest",
+    "coverageDirectory": "reports/coverage/jest",
     "coverageReporters": [
       "json",
       "lcov",

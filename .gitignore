@@ -22,5 +22,8 @@ dist/
 
 iopipe_handlers/
 
+reports/
+
+junit.xml
 
 test.js
