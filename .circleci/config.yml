@@ -42,7 +42,7 @@ jobs:
       - run: 
           name: Run tests with code coverage
           command: |
-            ./tmp/cc-test-reporter before-build
+            # ./tmp/cc-test-reporter before-build
             yarn test --ci --reporters=default --reporters=jest-junit
             ./tmp/cc-test-reporter format-coverage -t lcov -o tmp/codeclimate.unit.json reports/coverage/jest/lcov.info
           environment:
@@ -74,8 +74,6 @@ jobs:
           key: dependencies-cache-{{ checksum "package.json" }}
 
   upload-coverage:
-  # https://docs.codeclimate.com/docs/circle-ci-test-coverage-example
-  # https://docs.codeclimate.com/docs/configuring-test-coverage
     <<: *defaults
     environment: 
       CC_TEST_REPORTER_ID: 51713bb4a9cb8c9962cb016fbf692be4dad189b8fa712e76d6236bb9cfe59d3a

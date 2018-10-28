@@ -13,4 +13,4 @@
 ## Running
 
 1. `$ yarn`
-2. `$ sls deploy`
+1. `$ sls deploy`
