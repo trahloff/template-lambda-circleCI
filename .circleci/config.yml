@@ -12,8 +12,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - dependencies-cache-{{ checksum "package.json" }}
-            - dependencies-cache  # fallback to using the latest cache if no exact match is found
+            - yarn-packages-{{ checksum "yarn.lock" }}
+            - yarn-packages
       - run:
           name:  Download cc-test-reporter
           command: |
@@ -21,14 +21,13 @@ jobs:
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cclimate/cc-test-reporter
             chmod +x ./cclimate/cc-test-reporter
       - run:
-          name: Install Serverless CLI and dependencies
-          command: |
-            sudo npm i -g yarn
-            yarn
+          name: Install Dependencies
+          command: yarn install
       - persist_to_workspace:
           root: ./
           paths: 
             - ./
+            - ~/.cache/yarn
   
   update-dep-cache:
     <<: *defaults
@@ -36,9 +35,9 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - save_cache:
+          key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
-          key: dependencies-cache-{{ checksum "package.json" }}
+            - ~/.cache/yarn
   check:
     <<: *defaults
     steps:
