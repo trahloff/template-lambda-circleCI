@@ -7,6 +7,8 @@ engines:
       - javascript
   eslint:
     enabled: true
+    config:
+      config: .eslintrc
   fixme:
     enabled: true
   markdownlint:
@@ -19,4 +21,5 @@ ratings:
   - "**.js"
   - "**.md"
 exclude_paths:
-- .circleci/
+  - .circleci/
+  - .eslintrc.js
