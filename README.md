@@ -12,6 +12,7 @@
 - NodeJS
 - Serverless.com
 - AWS Creds
+- CircleCI Account
 
 ## Running
 
