@@ -28,12 +28,10 @@
     "@iopipe/iopipe": "^1.11.1"
   },
   "scripts": {
-    "sam": "serverless sam export --output ./sam-template.yml",
     "serve": "serverless offline start",
     "lint": "eslint",
     "test": "jest",
-    "sls": "sls",
-    "prune": "prune -n 5"
+    "sls": "sls"
   },
   "repository": {
     "type": "git",
@@ -49,10 +47,8 @@
       "reports"
     ],
     "coverageReporters": [
-      "json",
       "lcov",
-      "html",
-      "text"
+      "html"
     ]
   },
   "bugs": {
