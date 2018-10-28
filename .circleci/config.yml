@@ -2,7 +2,7 @@ version: 2
 
 defaults: &defaults
     working_directory: ~/repo
-    parallelism: 4
+    parallelism: 2
     docker:
       - image: circleci/node:8.10
 
@@ -117,9 +117,6 @@ workflows:
   release_dev:
     jobs:
       - build
-      - check:
-          requires:
-            - build
       - lint:
           requires:
             - build
