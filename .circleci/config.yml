@@ -29,11 +29,16 @@ jobs:
           root: ./
           paths: 
             - ./
+  
+  update-dep-cache:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
       - save_cache:
           paths:
             - node_modules
           key: dependencies-cache-{{ checksum "package.json" }}
-            
   check:
     <<: *defaults
     steps:
@@ -102,9 +107,9 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - store_test_results:
-          path: reports
+          path: /reports/
       - store_artifacts:
-          path: reports
+          path: /reports/
       - run:
           name: Upload coverage results to Code Climate
           command: |
@@ -117,6 +122,9 @@ workflows:
   release_dev:
     jobs:
       - build
+      - update-dep-cache:
+          requires:
+            - build
       - lint:
           requires:
             - build
