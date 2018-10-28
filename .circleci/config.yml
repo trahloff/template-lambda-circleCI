@@ -10,56 +10,122 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - dependencies-cache-{{ checksum "package.json" }}
             - dependencies-cache  # fallback to using the latest cache if no exact match is found
-
       - run:
           name:  Download cc-test-reporter
           command: |
             mkdir -p cclimate/
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cclimate/cc-test-reporter
             chmod +x ./cclimate/cc-test-reporter
-
       - run:
           name: Install Serverless CLI and dependencies
           command: |
             sudo npm i -g serverless yarn
             yarn
-
       - persist_to_workspace:
           root: ./
           paths: 
             - ./
-
       - save_cache:
           paths:
             - node_modules
           key: dependencies-cache-{{ checksum "package.json" }}
-
             
   check:
     <<: *defaults
     steps:
-      - checkout
       - attach_workspace:
           at: ~/repo
-
       - run:
           name: explore dir
           command: |
             echo "ls -al"
             ls -al 
 
+  lint: 
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: ESLint (StandardJS)
+          # yarn here makes sure we are using the local jest binary
+          command: yarn lint --format junit -o reports/eslint/results.xml ./
+      - persist_to_workspace:
+          root: ./
+          paths: 
+            - ./
+
+  unit-test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: 
+          name: Run tests with code coverage
+          command: |
+            yarn test --ci --reporters=default --reporters=jest-junit
+            ./cclimate/cc-test-reporter format-coverage -t lcov -o cclimate/codeclimate.unit.json reports/coverage/jest/lcov.info
+          environment:
+            JEST_JUNIT_OUTPUT: "reports/jest/results.xml"
+
+      - persist_to_workspace:
+          root: ./
+          paths: 
+            - ./
+
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Deploy application to DEV
+          command: |
+            sls deploy --verbose --stage dev
+
+      - run:
+          name: prune last versions
+          command: sls prune -n 5
+
+  upload-coverage:
+    <<: *defaults
+    environment: 
+      CC_TEST_REPORTER_ID: 51713bb4a9cb8c9962cb016fbf692be4dad189b8fa712e76d6236bb9cfe59d3a
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Upload coverage results to Code Climate
+          command: |
+            ./cclimate/cc-test-reporter sum-coverage cclimate/codeclimate.*.json -p 1 -o cclimate/codeclimate.total.json
+            ./cclimate/cc-test-reporter upload-coverage -i cclimate/codeclimate.total.json
+  
+
 workflows:
   version: 2
   release_dev:
     jobs:
-      - build:
-          context: aws-sls
+      - build
       - check:
           requires:
             - build
+      - lint:
+          requires:
+            - build
+      - unit-test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - lint
+            - unit-test
+          context: aws-sls
+      - upload-coverage:
+          requires:
+            - lint
+            - unit-test
         
