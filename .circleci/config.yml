@@ -1,14 +1,32 @@
 version: 2
-jobs:
-  build:
-    working_directory: ~/template-lambda-circleci
 
+defaults: &defaults
+    working_directory: ~/repo
     docker:
-      # specify the version you desire here
       - image: circleci/node:8.10
+
+jobs:
+  setup-codeclimate:
+    <<: *defaults
+    steps:
+      - run:
+          name:  Download cc-test-reporter
+          command: |
+            mkdir -p tmp/
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./tmp/cc-test-reporter
+            chmod +x ./tmp/cc-test-reporter
+      - persist_to_workspace:
+          root: tmp
+          paths:
+            - cc-test-reporter
+            
+  build:
+    <<: *defaults
 
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/repo/tmp
 
       - restore_cache:
           keys:
@@ -46,10 +64,29 @@ jobs:
             - node_modules
           key: dependencies-cache-{{ checksum "package.json" }}
 
+  upload-coverage:
+    <<: *defaults
+    environment: 
+      CC_TEST_REPORTER_ID: 51713bb4a9cb8c9962cb016fbf692be4dad189b8fa712e76d6236bb9cfe59d3a
+    steps:
+      - attach_workspace:
+          at: ~/repo/tmp
+      - run:
+          name: Upload coverage results to Code Climate
+          command: |
+            ./tmp/cc-test-reporter sum-coverage tmp/codeclimate.*.json -p 2 -o tmp/codeclimate.total.json
+            ./tmp/cc-test-reporter upload-coverage -i tmp/codeclimate.total.json
+  
 workflows:
   version: 2
   release_dev:
     jobs:
+      - setup-codeclimate
       - build:
           context: aws-sls
+          requires:
+            - setup-codeclimate
+      - upload-coverage:
+          requires:
+            - build
         
