@@ -23,21 +23,16 @@ jobs:
       - run:
           name: Install Dependencies
           command: yarn install
-      - persist_to_workspace:
-          root: ~/
-          paths: 
-            - repo
-            - .cache/yarn
-  
-  update-dep-cache:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
       - save_cache:
+          name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - persist_to_workspace:
+          root: ./
+          paths: 
+            - ./
+  
   check:
     <<: *defaults
     steps:
@@ -72,7 +67,6 @@ jobs:
       - run: 
           name: Run tests with code coverage
           command: |
-            ls -al
             yarn test --ci --reporters=default --reporters=jest-junit
             ./cclimate/cc-test-reporter format-coverage -t lcov -o cclimate/codeclimate.unit.json reports/coverage/jest/lcov.info
           environment:
@@ -122,9 +116,6 @@ workflows:
   release_dev:
     jobs:
       - build
-      - update-dep-cache:
-          requires:
-            - build
       - lint:
           requires:
             - build
