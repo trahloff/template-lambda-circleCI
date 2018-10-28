@@ -12,11 +12,11 @@ jobs:
       - run:
           name:  Download cc-test-reporter
           command: |
-            mkdir -p tmp/
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./tmp/cc-test-reporter
-            chmod +x ./tmp/cc-test-reporter
+            mkdir -p cclimate/
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cclimate/cc-test-reporter
+            chmod +x ./cclimate/cc-test-reporter
       - persist_to_workspace:
-          root: tmp
+          root: cclimate
           paths:
             - cc-test-reporter
             
@@ -25,7 +25,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/repo/tmp
+          at: ~/repo/cclimate
 
       - restore_cache:
           keys:
@@ -47,7 +47,7 @@ jobs:
           name: Run tests with code coverage
           command: |
             yarn test --ci --reporters=default --reporters=jest-junit
-            ./tmp/cc-test-reporter format-coverage -t lcov -o tmp/codeclimate.unit.json reports/coverage/jest/lcov.info
+            ./cclimate/cc-test-reporter format-coverage -t lcov -o cclimate/codeclimate.unit.json reports/coverage/jest/lcov.info
           environment:
             JEST_JUNIT_OUTPUT: "reports/jest/results.xml"
           
@@ -67,7 +67,7 @@ jobs:
           path: reports
 
       - persist_to_workspace:
-          root: tmp
+          root: cclimate
           paths: 
             - codeclimate.unit.json
 
@@ -82,12 +82,12 @@ jobs:
       CC_TEST_REPORTER_ID: 51713bb4a9cb8c9962cb016fbf692be4dad189b8fa712e76d6236bb9cfe59d3a
     steps:
       - attach_workspace:
-          at: ~/repo/tmp
+          at: ~/repo/cclimate
       - run:
           name: Upload coverage results to Code Climate
           command: |
-            ./tmp/cc-test-reporter sum-coverage tmp/codeclimate.*.json -p 1 -o tmp/codeclimate.total.json
-            ./tmp/cc-test-reporter upload-coverage -i tmp/codeclimate.total.json
+            ./cclimate/cc-test-reporter sum-coverage cclimate/codeclimate.*.json -p 1 -o cclimate/codeclimate.total.json
+            ./cclimate/cc-test-reporter upload-coverage -i cclimate/codeclimate.total.json
   
 workflows:
   version: 2
