@@ -12,7 +12,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
+            - yarn-packages_{{ checksum "yarn.lock" }}
             - yarn-packages
       - run:
           name:  Download cc-test-reporter
@@ -25,7 +25,7 @@ jobs:
           command: yarn install
       - save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+          key: yarn-packages_{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
       - persist_to_workspace:
