@@ -2,7 +2,6 @@ version: 2
 
 defaults: &defaults
     working_directory: ~/repo
-    parallelism: 2
     docker:
       - image: circleci/node:8.10
 
@@ -62,6 +61,7 @@ jobs:
 
   unit-test:
     <<: *defaults
+    parallelism: 2
     steps:
       - attach_workspace:
           at: ~/repo
