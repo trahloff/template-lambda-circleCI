@@ -33,6 +33,14 @@ jobs:
             - dependencies-cache  # fallback to using the latest cache if no exact match is found
 
       - run:
+          name: explore dir
+          command: |
+            echo "ls -al"
+            ls -al 
+            echo "ls ./cclimate -al"
+            ls ./cclimate -al
+
+      - run:
           name: Install Serverless CLI and dependencies
           command: |
             sudo npm i -g serverless yarn
