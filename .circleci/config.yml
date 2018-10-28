@@ -2,6 +2,7 @@ version: 2
 
 defaults: &defaults
     working_directory: ~/repo
+    parallelism: 4
     docker:
       - image: circleci/node:8.10
 
