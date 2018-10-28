@@ -44,7 +44,7 @@ jobs:
           command: |
             ./tmp/cc-test-reporter before-build
             yarn test --ci --reporters=default --reporters=jest-junit
-            ./tmp/cc-test-reporter format-coverage -t lcov -o tmp/codeclimate.frontend.json reports/coverage/jest/lcov.info
+            ./tmp/cc-test-reporter format-coverage -t lcov -o tmp/codeclimate.unit.json reports/coverage/jest/lcov.info
           environment:
             JEST_JUNIT_OUTPUT: "reports/jest/results.xml"
           
