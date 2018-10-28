@@ -10,8 +10,6 @@ plugins:
   - serverless-plugin-warmup # https://github.com/FidelLimited/serverless-plugin-warmup
   - serverless-prune-plugin # https://github.com/claygregory/serverless-prune-plugin
   - serverless-offline # https://github.com/dherault/serverless-offline
-  - serverless-sam # https://github.com/SAPessi/serveyarn rless-sam
-
 
 provider:
   name: aws
@@ -21,10 +19,11 @@ provider:
   memorySize: 1024
   region: ${opt:region, 'eu-central-1'}
   environment:
-    IOPIPE_TOKEN: ${env:IOPIPE_TOKEN}
+    API_VERSION: v1
     DYNAMODB_TABLE_EXAMPLE: ${self:service}-${opt:stage, self:provider.stage}-example
-    S3_BUCKET_EXAMPLE: ${self:service}-${opt:stage, self:provider.stage}-example
+    IOPIPE_TOKEN: ${env:IOPIPE_TOKEN}
     REGION: ${self:provider.region}
+    S3_BUCKET_EXAMPLE: ${self:service}-${opt:stage, self:provider.stage}-example
 
 
 package:
@@ -108,10 +107,10 @@ custom:
     prod: greetings
 
 ################################### DOMAIN MANAGEMENT ###################################
-  customDomain: # https://api.tobiasrahloff.com/v1/mensa
+  customDomain: # https://api.tobiasrahloff.com/v1/hello
     domainName: ${self:custom.domains.${self:custom.stage}}.tobiasrahloff.com
     stage: ${opt:stage, self:provider.stage}
-    basePath: v1
+    basePath: ${self:provider.environment.API_VERSION}
     certificateName: "tobiasrahloff.com"
     createRoute53Record: true
     endpointType: 'edge'
