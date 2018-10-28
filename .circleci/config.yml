@@ -10,10 +10,10 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - dependencies-cache-{{ checksum "package.json" }}
-            - dependencies-cache  # fallback to using the latest cache if no exact match is found
+      # - restore_cache:
+      #     keys:
+      #       - dependencies-cache-{{ checksum "package.json" }}
+      #       - dependencies-cache  # fallback to using the latest cache if no exact match is found
 
       - run:
           name: Install Serverless CLI and dependencies
