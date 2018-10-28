@@ -57,7 +57,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths: 
-            - ./
+            - reports/eslint/results.xml
 
   unit-test:
     <<: *defaults
@@ -75,7 +75,9 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths: 
-            - ./
+            - reports/jest/results.xml
+            - reports/coverage/jest/
+            - cclimate/codeclimate.unit.json
 
   deploy:
     <<: *defaults
@@ -98,6 +100,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
+      - store_test_results:
+          path: reports
+      - store_artifacts:
+          path: reports
       - run:
           name: Upload coverage results to Code Climate
           command: |
