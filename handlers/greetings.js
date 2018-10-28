@@ -1,5 +1,7 @@
 'use strict'
 
+const greetings = require('../lib/greetingsUtil')
+
 module.exports.hello = (event, context, callback) => {
   /** exit function immediately if invoked by serverless-warmup */
   if (event.source === 'serverless-plugin-warmup') {
@@ -7,14 +9,10 @@ module.exports.hello = (event, context, callback) => {
     return callback(null, 'Lambda is warm!')
   }
 
-  const responseBody = {
-    greeting: 'wahouli'
-  }
-
   // create a response
   const response = {
     statusCode: 200,
-    body: JSON.stringify(responseBody)
+    body: JSON.stringify(greetings.hello())
   }
   callback(null, response)
 }

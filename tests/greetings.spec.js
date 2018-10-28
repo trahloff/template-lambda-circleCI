@@ -2,7 +2,7 @@
 /* eslint-env jest, mocha */
 
 describe('greetings', () => {
-  const greetings = require('../functions/greetings')
+  const greetings = require('../handlers/greetings')
   describe('hello', () => {
     const hello = greetings.hello
     const context = {}
