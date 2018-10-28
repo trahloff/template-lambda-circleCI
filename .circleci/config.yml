@@ -37,9 +37,9 @@ jobs:
           command: sls prune -n 5
 
       - store_test_results:
-          path: reports/jest
+          path: reports
       - store_artifacts:
-          path: reports/jest
+          path: reports
 
       - save_cache:
           paths:
