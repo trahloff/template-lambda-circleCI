@@ -22,7 +22,6 @@ jobs:
             
   build:
     <<: *defaults
-
     steps:
       - checkout
       - attach_workspace:
