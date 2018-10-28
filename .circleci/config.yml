@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/cantinr-backend
+    working_directory: ~/template-lambda-circleci
 
     docker:
       # specify the version you desire here
