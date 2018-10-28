@@ -23,7 +23,9 @@ jobs:
 
       - run: 
           name: Run tests with code coverage
-          command: yarn test --coverage
+          command: jest --ci --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
 
       - run:
           name: Deploy application to DEV
@@ -33,6 +35,11 @@ jobs:
       - run:
           name: prune last versions
           command: sls prune -n 5
+
+      - store_test_results:
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit
 
       - save_cache:
           paths:

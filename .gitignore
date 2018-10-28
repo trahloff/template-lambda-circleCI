@@ -20,5 +20,7 @@ dist/
 
 *.log
 
+iopipe_handlers/
+
 
 test.js
