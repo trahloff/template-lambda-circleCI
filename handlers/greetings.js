@@ -1,5 +1,3 @@
-'use strict'
-
 const greetings = require('../lib/greetingsUtil')
 
 module.exports.hello = (event, context, callback) => {
