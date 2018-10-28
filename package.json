@@ -29,6 +29,7 @@
   "scripts": {
     "sam": "serverless sam export --output ./sam-template.yml",
     "serve": "serverless offline start",
+    "lint": "eslint",
     "test": "jest",
     "prune": "prune -n 5"
   },
@@ -41,6 +42,10 @@
   "jest": {
     "collectCoverage": true,
     "coverageDirectory": "reports/coverage/jest",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "reports"
+    ],
     "coverageReporters": [
       "json",
       "lcov",

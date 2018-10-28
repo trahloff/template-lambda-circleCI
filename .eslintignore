@@ -1,0 +1,6 @@
+node_modules/
+.serverless/
+_warmup/
+dist/
+iopipe_handlers/
+reports/
