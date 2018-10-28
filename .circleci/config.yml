@@ -72,6 +72,7 @@ jobs:
       - run: 
           name: Run tests with code coverage
           command: |
+            ls -al
             yarn test --ci --reporters=default --reporters=jest-junit
             ./cclimate/cc-test-reporter format-coverage -t lcov -o cclimate/codeclimate.unit.json reports/coverage/jest/lcov.info
           environment:
