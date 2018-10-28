@@ -16,6 +16,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^23.1.0",
     "jest-junit": "^5.2.0",
+    "serverless": "^1.32.0",
     "serverless-domain-manager": "^2.4.0",
     "serverless-offline": "^3.25.4",
     "serverless-plugin-iopipe": "^1.6.2",
@@ -31,6 +32,7 @@
     "serve": "serverless offline start",
     "lint": "eslint",
     "test": "jest",
+    "sls": "sls",
     "prune": "prune -n 5"
   },
   "repository": {

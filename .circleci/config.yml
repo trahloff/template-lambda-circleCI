@@ -23,7 +23,7 @@ jobs:
       - run:
           name: Install Serverless CLI and dependencies
           command: |
-            sudo npm i -g serverless yarn
+            sudo npm i -g yarn
             yarn
       - persist_to_workspace:
           root: ./
@@ -87,11 +87,11 @@ jobs:
       - run:
           name: Deploy application to DEV
           command: |
-            sls deploy --verbose --stage dev
+            yarn sls deploy --verbose --stage dev
 
       - run:
           name: prune last versions
-          command: sls prune -n 5
+          command: yarn sls prune -n 5
 
   upload-coverage:
     <<: *defaults
