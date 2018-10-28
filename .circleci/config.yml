@@ -24,16 +24,16 @@ jobs:
           name: Install Dependencies
           command: yarn install
       - persist_to_workspace:
-          root: ./
+          root: ~/
           paths: 
-            - ./
-            - ~/.cache/yarn
+            - repo
+            - .cache/yarn
   
   update-dep-cache:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/repo
+          at: ~/
       - save_cache:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
