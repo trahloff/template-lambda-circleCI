@@ -5,6 +5,7 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 
 
 plugins:
+  - serverless-webpack #https://github.com/serverless-heaven/serverless-webpack
   - serverless-domain-manager # https://github.com/amplify-education/serverless-domain-manager
   - serverless-plugin-warmup # https://github.com/FidelLimited/serverless-plugin-warmup
   - serverless-prune-plugin # https://github.com/claygregory/serverless-prune-plugin
@@ -100,6 +101,9 @@ resources:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  webpack:
+    webpackIncludeModules: true
+    packager: yarn
   domains:
     dev: api
     staging: staging-api
