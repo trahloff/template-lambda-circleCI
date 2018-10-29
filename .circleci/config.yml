@@ -116,19 +116,19 @@ workflows:
   release_dev:
     jobs:
       - build
-      # - lint:
-      #     requires:
-      #       - build
-      # - unit-test:
-      #     requires:
-      #       - build
-      # - deploy:
-      #     requires:
-      #       - lint
-      #       - unit-test
-      #     context: aws-sls
-      # - upload-coverage:
-      #     requires:
-      #       - lint
-      #       - unit-test
+      - lint:
+          requires:
+            - build
+      - unit-test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - lint
+            - unit-test
+          context: aws-sls
+      - upload-coverage:
+          requires:
+            - lint
+            - unit-test
         
