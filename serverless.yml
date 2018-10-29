@@ -34,6 +34,7 @@ package:
     - .circleci/**
     - _optimize/**
     - _warmup/**
+    - iopipe_handlers/**
     - '*.log'
     # - node_modules/**
 
@@ -47,7 +48,6 @@ package:
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:UpdateItem
-        # - dynamodb:DeleteItem # not needed right now
       Resource: 
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_EXAMPLE}"
 
