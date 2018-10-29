@@ -2,7 +2,7 @@
 /* eslint-env jest, mocha */
 
 describe('greetings', () => {
-  const greetings = require('../lib/greetingsUtil')
+  const greetings = require('../src/lib/greetingsUtil')
 
   it('should should return the ancient greeting "wahouli"', (done) => {
     expect(greetings.hello()).toEqual({

@@ -68,13 +68,12 @@ package:
 
 ####################################### Functions #######################################
 functions:
-  hello:
-    handler: handlers/greetings
+  first:
+    handler: src/handlers/greetings.createHelloResponse
     events:
       - http:
           path: hello
           method: get
-          cors: true
 
 
 resources:

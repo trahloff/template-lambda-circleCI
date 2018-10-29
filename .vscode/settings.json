@@ -3,6 +3,7 @@
         "**/node_modules": true,
         "**/.serverless": true,
         "**/_warmup": true,
+        "**/.webpack": true,
         "**/iopipe_handlers": true
     }
 }

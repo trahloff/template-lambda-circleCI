@@ -1,6 +1,6 @@
-const greetings = require('../lib/greetingsUtil')
+import { hello } from '../lib/greetingsUtil'
 
-module.exports.hello = (event, context, callback) => {
+export function createHelloResponse (event, context, callback) {
   /** exit function immediately if invoked by serverless-warmup */
   if (event.source === 'serverless-plugin-warmup') {
     console.log('WarmUP - Lambda is warm!')
@@ -10,7 +10,7 @@ module.exports.hello = (event, context, callback) => {
   // create a response
   const response = {
     statusCode: 200,
-    body: JSON.stringify(greetings.hello())
+    body: JSON.stringify(hello())
   }
   callback(null, response)
 }

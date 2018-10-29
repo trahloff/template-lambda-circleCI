@@ -3,8 +3,8 @@
 
 describe('handlers', () => {
   describe('greetings', () => {
-    const greetings = require('../handlers/greetings')
-    const hello = greetings.hello
+    const greetings = require('../src/handlers/greetings')
+    const hello = greetings.createHelloResponse
     const context = {}
 
     it('should exit immidiately if source is serverless-warmup', (done) => {

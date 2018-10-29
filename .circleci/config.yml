@@ -23,17 +23,22 @@ jobs:
       - run:
           name: Install Dependencies
           command: yarn install
+      - persist_to_workspace:
+          root: ./
+          paths: 
+            - ./
+  
+  update-cache:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
             - ~/.cache/yarn
-      - persist_to_workspace:
-          root: ./
-          paths: 
-            - ./
-  
   check:
     <<: *defaults
     steps:
@@ -116,6 +121,9 @@ workflows:
   release_dev:
     jobs:
       - build
+      - update-cache:
+          requires:
+            - build
       - lint:
           requires:
             - build
