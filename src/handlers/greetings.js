@@ -7,7 +7,7 @@ export function createHelloResponse (event, context, callback) {
     return callback(null, 'Lambda is warm!')
   }
 
-  // create a response
+  // create a response object
   const response = {
     statusCode: 200,
     body: JSON.stringify(hello())
