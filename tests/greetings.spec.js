@@ -6,7 +6,7 @@ describe('greetings', () => {
 
   it('should should return the ancient greeting "wahouli"', (done) => {
     expect(greetings.hello()).toEqual({
-      greeting: 'wahouli'
+      greeting: 'wahoulii'
     })
     done()
   })
