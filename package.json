@@ -14,7 +14,6 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "babel-runtime": "^6.26.0",
     "eslint": "^5.8.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
@@ -34,7 +33,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "random-name": "^0.1.2"
+    "babel-runtime": "^6.26.0"
   },
   "scripts": {
     "serve": "serverless offline start",

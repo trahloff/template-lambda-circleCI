@@ -5849,10 +5849,6 @@ ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
-random-name@^0.1.2:
-  version "0.1.2"
-  resolved "http://registry.npmjs.org/random-name/-/random-name-0.1.2.tgz#20a1ad0efce9976764c5dd3c418c7018b57e816d"
-
 randomatic@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-3.0.0.tgz#d35490030eb4f7578de292ce6dfb04a91a128923"

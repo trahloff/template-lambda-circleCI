@@ -68,7 +68,7 @@ package:
 
 ####################################### Functions #######################################
 functions:
-  first:
+  hello:
     handler: src/handlers/greetings.createHelloResponse
     events:
       - http:
@@ -102,6 +102,7 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   webpack:
     webpackIncludeModules: true
+    includeModules: true
     packager: yarn
   domains:
     dev: api
