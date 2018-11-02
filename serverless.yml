@@ -5,7 +5,8 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 
 
 plugins:
-  - serverless-webpack #https://github.com/serverless-heaven/serverless-webpack
+  - serverless-plugin-iopipe # https://github.com/iopipe/serverless-plugin-iopipe
+  - serverless-webpack # https://github.com/serverless-heaven/serverless-webpack
   - serverless-domain-manager # https://github.com/amplify-education/serverless-domain-manager
   - serverless-plugin-warmup # https://github.com/FidelLimited/serverless-plugin-warmup
   - serverless-prune-plugin # https://github.com/claygregory/serverless-prune-plugin
@@ -120,7 +121,7 @@ custom:
     
 ############################# WARMUP MANAGEMENT #############################
   warmup:
-    default: prod
+    default: true
     folderName: '_warmup' # Name of the folder created for the generated warmup 
     cleanFolder: false
     memorySize: 256
