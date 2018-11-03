@@ -7,6 +7,8 @@ export function createHelloResponse (event, context, callback) {
     return callback(null, 'Lambda is warm!')
   }
 
+  console.log(`event: ${event.source}`)
+
   // create a response object
   const response = {
     statusCode: 200,

@@ -123,8 +123,7 @@ custom:
   warmup:
     default: true
     folderName: '_warmup' # Name of the folder created for the generated warmup 
-    cleanFolder: false
-    memorySize: 256
     name: ${self:service}-${opt:stage, self:provider.stage}-warmup
     schedule: 'cron(0/5 8-17 ? * MON-FRI *)' # Run WarmUP every 5 minutes Mon-Fri between 8:00am and 5:55pm (UTC)
     timeout: 20
+    prewarm: true
